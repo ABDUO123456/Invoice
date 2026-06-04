@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import html2canvas from 'html2canvas';
 import { 
   Printer, Plus, Trash2, Truck, Save, List, FileText, 
   ChevronRight, ArrowRight, CheckCircle2, Globe, ShieldCheck, 
-  Zap, Menu, X, Phone, Mail, MapPin
+  Zap, Menu, X, Phone, Mail, MapPin, Download
 } from 'lucide-react';
 
 const App = () => {
@@ -43,6 +44,23 @@ const App = () => {
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
   });
+
+  const downloadImage = async () => {
+    if (componentRef.current) {
+      const canvas = await html2canvas(componentRef.current, {
+        scale: 2, // Higher quality
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+      
+      const image = canvas.toDataURL('image/png', 1.0);
+      const link = document.createElement('a');
+      link.download = `facture-${invoiceData.number}-${invoiceData.client.name || 'client'}.png`;
+      link.href = image;
+      link.click();
+    }
+  };
 
   const calculateTotal = (items = invoiceData.items) => {
     return items.reduce((acc, item) => acc + (item.qte * item.pu), 0);
@@ -489,10 +507,16 @@ const App = () => {
                         <Save size={18} /> حفظ
                       </button>
                       <button 
+                        onClick={downloadImage}
+                        className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-900 transition"
+                      >
+                        <Download size={18} /> حفظ في الهاتف
+                      </button>
+                      <button 
                         onClick={handlePrint}
                         className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
                       >
-                        <Printer size={18} /> طباعة
+                        <Printer size={18} /> طباعة / PDF
                       </button>
                     </div>
                   </div>
@@ -515,6 +539,66 @@ const App = () => {
                         onChange={(e) => setInvoiceData({...invoiceData, date: e.target.value})}
                         className="w-full border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-[#bc2c24]/20 outline-none"
                       />
+                    </div>
+                  </div>
+
+                  <div className="mb-6">
+                    <h3 className="text-sm font-bold text-slate-400 uppercase mb-3 border-b pb-2">معلومات الشركة (البائع)</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] text-slate-500 mb-1 font-bold">اسم الشركة / المحل</label>
+                        <input 
+                          type="text" 
+                          value={invoiceData.company.name} 
+                          onChange={(e) => setInvoiceData({...invoiceData, company: {...invoiceData.company, name: e.target.value}})}
+                          className="w-full border border-slate-200 rounded-lg p-2 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-slate-500 mb-1 font-bold">المنصب (مثال: مدير)</label>
+                        <input 
+                          type="text" 
+                          value={invoiceData.company.title} 
+                          onChange={(e) => setInvoiceData({...invoiceData, company: {...invoiceData.company, title: e.target.value}})}
+                          className="w-full border border-slate-200 rounded-lg p-2 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-slate-500 mb-1 font-bold">رقم الهاتف</label>
+                        <input 
+                          type="text" 
+                          value={invoiceData.company.phone} 
+                          onChange={(e) => setInvoiceData({...invoiceData, company: {...invoiceData.company, phone: e.target.value}})}
+                          className="w-full border border-slate-200 rounded-lg p-2 text-sm"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] text-slate-500 mb-1 font-bold">رقم السجل التجاري (RC)</label>
+                        <input 
+                          type="text" 
+                          value={invoiceData.company.rc} 
+                          onChange={(e) => setInvoiceData({...invoiceData, company: {...invoiceData.company, rc: e.target.value}})}
+                          className="w-full border border-slate-200 rounded-lg p-2 text-sm"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] text-slate-500 mb-1 font-bold">النشاط التجاري</label>
+                        <input 
+                          type="text" 
+                          value={invoiceData.company.activity} 
+                          onChange={(e) => setInvoiceData({...invoiceData, company: {...invoiceData.company, activity: e.target.value}})}
+                          className="w-full border border-slate-200 rounded-lg p-2 text-sm"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] text-slate-500 mb-1 font-bold">العنوان الكامل</label>
+                        <textarea 
+                          rows="2"
+                          value={invoiceData.company.address} 
+                          onChange={(e) => setInvoiceData({...invoiceData, company: {...invoiceData.company, address: e.target.value}})}
+                          className="w-full border border-slate-200 rounded-lg p-2 text-sm resize-none"
+                        />
+                      </div>
                     </div>
                   </div>
 
