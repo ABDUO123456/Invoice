@@ -29,6 +29,28 @@ const App = () => {
       rc: '00/00-0000000A 00',
       activity: 'نشاط الشركة التجاري',
       address: 'عنوان الشركة بالتفصيل - المدينة'
+    },
+    warranty: {
+      title: 'شروط الضمان والإرجاع',
+      terms: [
+        'زيت المحرك المستهلك في ورشة GMe ضمان 100 يوم',
+        'زيت المحرك المستهلك في ورشة أخرى: 10 أيام'
+      ],
+      returnConditions: {
+        title: 'يعتبر إرجاع المحرك في حالة:',
+        items: [
+          'ارتفاع غير طبيعي في درجة الحرارة خلال 48 ساعة من التركيب.',
+          'يجب على العميل التحقق من الزيت قبل مغادرة الورشة.'
+        ]
+      },
+      nonAcceptance: {
+        title: 'لا يقبل الإرجاع أو الاستبدال في الحالات التالية:',
+        items: [
+          'فتح المحرك أو تفكيكه من قبل العميل.',
+          'كسر أو ضغط داخلي.',
+          'صدمة حادة (مثل خروج المكبس) أو سوء الاستخدام.'
+        ]
+      }
     }
   });
 
@@ -769,7 +791,40 @@ const App = () => {
                       </div>
                     </div>
 
-                    {/* Signature and Stamp - Moved up closer to total */}
+                    {/* Warranty Section */}
+                    <div className="mt-6 bg-[#f8f8f8] p-4 border-r-4 border-[#bc2c24] rounded-sm text-right" dir="rtl" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                      <h4 className="text-[12px] font-bold text-[#bc2c24] mb-2">{invoiceData.warranty.title}</h4>
+                      <ul className="text-[10px] text-gray-700 space-y-1 mb-3">
+                        {invoiceData.warranty.terms.map((term, i) => (
+                          <li key={i} className="flex items-start gap-1">
+                            <span className="mt-1.5 w-1 h-1 bg-[#bc2c24] rounded-full shrink-0"></span>
+                            <span>{term}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <h4 className="text-[11px] font-bold text-gray-800 mb-1">{invoiceData.warranty.returnConditions.title}</h4>
+                      <ul className="text-[10px] text-gray-700 space-y-1 mb-3">
+                        {invoiceData.warranty.returnConditions.items.map((item, i) => (
+                          <li key={i} className="flex items-start gap-1">
+                            <span className="mt-1.5 w-1 h-1 bg-[#bc2c24] rounded-full shrink-0"></span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <h4 className="text-[11px] font-bold text-gray-800 mb-1">{invoiceData.warranty.nonAcceptance.title}</h4>
+                      <ul className="text-[10px] text-gray-700 space-y-1">
+                        {invoiceData.warranty.nonAcceptance.items.map((item, i) => (
+                          <li key={i} className="flex items-start gap-1">
+                            <span className="mt-1.5 w-1 h-1 bg-[#bc2c24] rounded-full shrink-0"></span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Signature and Stamp */}
                     <div className="mt-10 grid grid-cols-2 gap-16 items-start">
                       <div className="border border-gray-100 rounded-sm p-3 h-28 flex flex-col justify-end">
                         <p className="text-[9px] text-gray-400 text-center italic font-bold uppercase">Signature du client</p>
