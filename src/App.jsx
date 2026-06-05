@@ -251,7 +251,7 @@ const App = () => {
                   onClick={() => setCurrentPage('app')}
                   className="bg-[#bc2c24] text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-[#a1251e] shadow-lg shadow-[#bc2c24]/20 transition flex items-center gap-3"
                 >
-                  ابدأ الاستخدام مجاناً <ArrowRight size={22} />
+                  ابدأ الاستخدام الآن <ArrowRight size={22} />
                 </button>
                 <a 
                   href="#features"
@@ -333,7 +333,7 @@ const App = () => {
             </div>
             <div>
               <div className="text-4xl font-black mb-2">100%</div>
-              <div className="text-sm opacity-80 uppercase tracking-wider">مجاني تماماً</div>
+              <div className="text-sm opacity-80 uppercase tracking-wider">احترافي وسريع</div>
             </div>
             <div>
               <div className="text-4xl font-black mb-2">24/7</div>
