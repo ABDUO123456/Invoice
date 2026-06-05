@@ -69,11 +69,14 @@ const App = () => {
 
   const downloadImage = async () => {
     if (componentRef.current) {
+      // Create a temporary clone to manipulate for export
       const canvas = await html2canvas(componentRef.current, {
-        scale: 2, // Higher quality
+        scale: 3, // Even higher quality for better text rendering
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        letterRendering: true, // Helps with some text issues
+        allowTaint: true
       });
       
       const image = canvas.toDataURL('image/png', 1.0);
@@ -706,119 +709,119 @@ const App = () => {
                 </div>
 
                 {/* Preview Side (The actual template) */}
-                <div className="invoice-container lg:w-[210mm] lg:h-[297mm] bg-white shadow-2xl overflow-hidden flex flex-col shrink-0 relative" ref={componentRef} style={{ direction: 'ltr' }}>
+                <div className="invoice-container lg:w-[210mm] lg:h-[297mm] bg-white shadow-2xl overflow-hidden flex flex-col shrink-0 relative" ref={componentRef} style={{ direction: 'rtl', fontFamily: "'Cairo', sans-serif" }}>
                   
                   {/* Header: Red background */}
-                  <div className="bg-[#bc2c24] text-white p-8 flex justify-between items-center" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                    <div className="bg-white p-3 rounded-sm shadow-sm">
+                  <div className="bg-[#bc2c24] text-white p-8 flex flex-row-reverse justify-between items-center" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                    <div className="bg-white p-3 rounded-sm shadow-sm shrink-0">
                       <Truck size={50} className="text-[#bc2c24]" />
                     </div>
-                    <div className="text-right">
-                      <h1 className="text-[32px] font-bold tracking-tight uppercase leading-none">{invoiceData.company.name}</h1>
-                      <p className="text-[12px] mt-2 opacity-95 font-medium">{invoiceData.company.title} | {invoiceData.company.phone}</p>
+                    <div className="text-right flex-1 pr-8">
+                      <h1 className="text-[32px] font-black tracking-normal leading-tight">{invoiceData.company.name}</h1>
+                      <p className="text-[14px] mt-1 opacity-95 font-bold">{invoiceData.company.title} | {invoiceData.company.phone}</p>
                     </div>
                   </div>
 
                   {/* Company Meta: Light Gray bar */}
-                  <div className="bg-[#f0f0f0] p-2 px-8 text-[10px] text-gray-700 flex flex-col items-end gap-0.5 border-b border-gray-200" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                    <div className="flex gap-2">
-                      <span className="font-bold">N° Registre de Commerce :</span>
+                  <div className="bg-[#f0f0f0] p-2 px-8 text-[11px] text-gray-700 flex flex-col items-start gap-1 border-b border-gray-200" style={{ WebkitPrintColorAdjust: 'exact', direction: 'rtl', textAlign: 'right' }}>
+                    <div className="flex gap-2 w-full justify-start">
+                      <span className="font-bold shrink-0">رقم السجل التجاري :</span>
                       <span>{invoiceData.company.rc}</span>
                     </div>
-                    <div className="flex gap-2">
-                      <span className="font-bold">Activité :</span>
+                    <div className="flex gap-2 w-full justify-start">
+                      <span className="font-bold shrink-0">النشاط :</span>
                       <span>{invoiceData.company.activity}</span>
                     </div>
-                    <div className="flex gap-2">
-                      <span className="font-bold">Adresse :</span>
+                    <div className="flex gap-2 w-full justify-start">
+                      <span className="font-bold shrink-0">العنوان :</span>
                       <span>{invoiceData.company.address}</span>
                     </div>
                   </div>
 
                   {/* Client & Invoice Box */}
-                  <div className="p-8 pt-10 flex justify-between items-start gap-10">
-                    <div className="flex-1 border-l-[4px] border-[#bc2c24] bg-white p-4 shadow-sm min-h-[80px] flex flex-col justify-center">
-                      <p className="text-[9px] text-gray-400 uppercase font-bold mb-1">CLIENT :</p>
-                      <h2 className="text-[18px] font-black text-gray-800 uppercase leading-tight">{invoiceData.client.name}</h2>
-                      <p className="text-[12px] text-gray-600 mt-1 font-medium">Tél: {invoiceData.client.phone}</p>
+                  <div className="p-8 pt-10 flex flex-row-reverse justify-between items-start gap-10">
+                    <div className="flex-1 border-r-[5px] border-[#bc2c24] bg-white p-4 shadow-sm min-h-[90px] flex flex-col justify-center text-right">
+                      <p className="text-[10px] text-gray-400 font-bold mb-1">العميل :</p>
+                      <h2 className="text-[20px] font-black text-gray-800 leading-tight">{invoiceData.client.name}</h2>
+                      <p className="text-[13px] text-gray-600 mt-1 font-bold">هاتف: {invoiceData.client.phone}</p>
                     </div>
 
-                    <div className="flex-1 bg-[#bc2c24] text-white p-5 rounded-[12px] text-center shadow-md" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                      <h3 className="text-[16px] font-black uppercase tracking-wider">FACTURE N° {invoiceData.number}</h3>
-                      <p className="text-[12px] opacity-90 mt-1 font-medium">Date : {invoiceData.date}</p>
+                    <div className="flex-1 bg-[#bc2c24] text-white p-6 rounded-[12px] text-center shadow-md" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                      <h3 className="text-[18px] font-black tracking-wide">فاتورة رقم {invoiceData.number}</h3>
+                      <p className="text-[13px] opacity-90 mt-1 font-bold">التاريخ : {invoiceData.date}</p>
                     </div>
                   </div>
 
                   {/* Detail label */}
-                  <div className="px-8 mb-2">
-                    <p className="text-[9px] text-gray-400 uppercase font-bold tracking-wider">DETAIL DE LA FACTURE</p>
+                  <div className="px-8 mb-2 text-right">
+                    <p className="text-[10px] text-gray-400 font-bold tracking-wider">تفاصيل الفاتورة</p>
                   </div>
 
                   {/* Table */}
                   <div className="px-8 flex-grow overflow-hidden">
-                    <table className="w-full border-collapse">
+                    <table className="w-full border-collapse" dir="rtl">
                       <thead>
-                        <tr className="bg-[#bc2c24] text-white text-[10px] font-bold uppercase" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                          <th className="py-2 px-4 text-left border border-gray-300">DÉSIGNATION</th>
-                          <th className="py-2 px-4 text-center border border-gray-300 w-16">QTÉ</th>
-                          <th className="py-2 px-4 text-right border border-gray-300 w-32">P.U (DZD)</th>
-                          <th className="py-2 px-4 text-right border border-gray-300 w-32">TOTAL (DZD)</th>
+                        <tr className="bg-[#bc2c24] text-white text-[11px] font-bold" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                          <th className="py-2 px-4 text-right border border-gray-300">البيان</th>
+                          <th className="py-2 px-4 text-center border border-gray-300 w-20">الكمية</th>
+                          <th className="py-2 px-4 text-left border border-gray-300 w-36">سعر الوحدة (د.ج)</th>
+                          <th className="py-2 px-4 text-left border border-gray-300 w-36">المجموع (د.ج)</th>
                         </tr>
                       </thead>
-                      <tbody className="text-[12px]">
+                      <tbody className="text-[13px]">
                         {invoiceData.items.map((item, index) => (
-                          <tr key={index} className="text-gray-800 font-bold">
-                            <td className="py-3 px-4 border border-gray-300">{item.designation}</td>
+                          <tr key={index} className="text-gray-800 font-bold border-b border-gray-200">
+                            <td className="py-3 px-4 border border-gray-300 text-right">{item.designation}</td>
                             <td className="py-3 px-4 border border-gray-300 text-center font-black">{item.qte}</td>
-                            <td className="py-3 px-4 border border-gray-300 text-right">{item.pu.toLocaleString('fr-FR', { minimumFractionDigits: 2 }).replace(',', '.')}</td>
-                            <td className="py-3 px-4 border border-gray-300 text-right">{(item.qte * item.pu).toLocaleString('fr-FR', { minimumFractionDigits: 2 }).replace(',', '.')}</td>
+                            <td className="py-3 px-4 border border-gray-300 text-left" dir="ltr">{item.pu.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-3 px-4 border border-gray-300 text-left font-black" dir="ltr">{(item.qte * item.pu).toLocaleString('fr-FR', { minimumFractionDigits: 2 })}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
 
                     {/* Total Section */}
-                    <div className="mt-2 flex justify-end">
-                      <div className="flex items-stretch bg-[#bc2c24] text-white rounded-md overflow-hidden h-9 border border-[#bc2c24]" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                        <div className="px-4 flex items-center justify-center border-r border-white/20 min-w-[130px]">
-                          <span className="font-bold uppercase text-[11px] tracking-tight">TOTAL GÉNÉRAL :</span>
+                    <div className="mt-4 flex justify-start">
+                      <div className="flex items-stretch bg-[#bc2c24] text-white rounded-md overflow-hidden h-11 border border-[#bc2c24]" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                        <div className="px-5 flex items-center justify-center border-l border-white/20 min-w-[140px]">
+                          <span className="font-black text-[13px]">الإجمالي العام :</span>
                         </div>
-                        <div className="px-6 bg-white flex items-center justify-end min-w-[180px]">
-                          <span className="text-[#bc2c24] font-black text-[16px]">
-                            {calculateTotal().toLocaleString('fr-FR', { minimumFractionDigits: 2 }).replace(/\s/g, ' ').replace(',', '.')} DZD
+                        <div className="px-8 bg-white flex items-center justify-start min-w-[200px]">
+                          <span className="text-[#bc2c24] font-black text-[18px]" dir="ltr">
+                            {calculateTotal().toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DZD
                           </span>
                         </div>
                       </div>
                     </div>
 
                     {/* Warranty Section */}
-                    <div className="mt-6 bg-[#f8f8f8] p-4 border-r-4 border-[#bc2c24] rounded-sm text-right" dir="rtl" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                      <h4 className="text-[12px] font-bold text-[#bc2c24] mb-2">{invoiceData.warranty.title}</h4>
-                      <ul className="text-[10px] text-gray-700 space-y-1 mb-3">
+                    <div className="mt-6 bg-[#f8f8f8] p-5 border-r-4 border-[#bc2c24] rounded-sm text-right shadow-sm" style={{ WebkitPrintColorAdjust: 'exact', direction: 'rtl' }}>
+                      <h4 className="text-[13px] font-black text-[#bc2c24] mb-3">{invoiceData.warranty.title}</h4>
+                      <ul className="text-[11px] text-gray-700 space-y-1.5 mb-4 pr-0">
                         {invoiceData.warranty.terms.map((term, i) => (
-                          <li key={i} className="flex items-start gap-1">
-                            <span className="mt-1.5 w-1 h-1 bg-[#bc2c24] rounded-full shrink-0"></span>
-                            <span>{term}</span>
+                          <li key={i} className="flex items-start gap-2 justify-start flex-row">
+                            <span className="mt-2 w-1.5 h-1.5 bg-[#bc2c24] rounded-full shrink-0"></span>
+                            <span className="text-right">{term}</span>
                           </li>
                         ))}
                       </ul>
 
-                      <h4 className="text-[11px] font-bold text-gray-800 mb-1">{invoiceData.warranty.returnConditions.title}</h4>
-                      <ul className="text-[10px] text-gray-700 space-y-1 mb-3">
+                      <h4 className="text-[12px] font-black text-gray-800 mb-2">{invoiceData.warranty.returnConditions.title}</h4>
+                      <ul className="text-[11px] text-gray-700 space-y-1.5 mb-4 pr-0">
                         {invoiceData.warranty.returnConditions.items.map((item, i) => (
-                          <li key={i} className="flex items-start gap-1">
-                            <span className="mt-1.5 w-1 h-1 bg-[#bc2c24] rounded-full shrink-0"></span>
-                            <span>{item}</span>
+                          <li key={i} className="flex items-start gap-2 justify-start flex-row">
+                            <span className="mt-2 w-1.5 h-1.5 bg-[#bc2c24] rounded-full shrink-0"></span>
+                            <span className="text-right">{item}</span>
                           </li>
                         ))}
                       </ul>
 
-                      <h4 className="text-[11px] font-bold text-gray-800 mb-1">{invoiceData.warranty.nonAcceptance.title}</h4>
-                      <ul className="text-[10px] text-gray-700 space-y-1">
+                      <h4 className="text-[12px] font-black text-gray-800 mb-2">{invoiceData.warranty.nonAcceptance.title}</h4>
+                      <ul className="text-[11px] text-gray-700 space-y-1.5 pr-0">
                         {invoiceData.warranty.nonAcceptance.items.map((item, i) => (
-                          <li key={i} className="flex items-start gap-1">
-                            <span className="mt-1.5 w-1 h-1 bg-[#bc2c24] rounded-full shrink-0"></span>
-                            <span>{item}</span>
+                          <li key={i} className="flex items-start gap-2 justify-start flex-row">
+                            <span className="mt-2 w-1.5 h-1.5 bg-[#bc2c24] rounded-full shrink-0"></span>
+                            <span className="text-right">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -827,11 +830,11 @@ const App = () => {
                     {/* Signature and Stamp */}
                     <div className="mt-10 grid grid-cols-2 gap-16 items-start">
                       <div className="border border-gray-100 rounded-sm p-3 h-28 flex flex-col justify-end">
-                        <p className="text-[9px] text-gray-400 text-center italic font-bold uppercase">Signature du client</p>
+                        <p className="text-[10px] text-gray-400 text-center italic font-bold">توقيع العميل</p>
                       </div>
                       <div className="flex justify-center">
-                        <div className="w-48 h-20 bg-gray-200 border border-dashed border-gray-300 rounded-sm flex items-center justify-center">
-                          <span className="text-[10px] text-gray-400 uppercase font-bold">Cachet & Signature</span>
+                        <div className="w-48 h-24 bg-gray-50 border border-dashed border-gray-300 rounded-sm flex items-center justify-center">
+                          <span className="text-[11px] text-gray-300 font-bold">الختم والتوقيع</span>
                         </div>
                       </div>
                     </div>
@@ -839,8 +842,8 @@ const App = () => {
 
                   {/* Footer Bar stays at the bottom */}
                   <div className="mt-auto">
-                    <div className="bg-[#bc2c24] text-white py-3 px-8 text-[8px] text-center font-bold uppercase tracking-tight" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                      {invoiceData.company.name} — {invoiceData.company.address} — Tél : {invoiceData.company.phone} | RC : {invoiceData.company.rc}
+                    <div className="bg-[#bc2c24] text-white py-4 px-8 text-[10px] text-center font-bold tracking-normal leading-relaxed" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                      {invoiceData.company.name} — {invoiceData.company.address} — هاتف: {invoiceData.company.phone} | سجل تجاري: {invoiceData.company.rc}
                     </div>
                   </div>
 
