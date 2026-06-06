@@ -13,42 +13,50 @@ const App = () => {
   const [savedInvoices, setSavedInvoices] = useState([]);
   const [invoiceData, setInvoiceData] = useState({
     id: Date.now(),
-    number: '0001',
-    date: new Date().toLocaleDateString('fr-FR'),
+    number: '023',
+    date: '12 / 05 / 2026',
     client: {
-      name: '',
-      phone: ''
+      name: 'BELBOULA MILOUD',
+      phone: '0774771428'
     },
     items: [
-      { designation: '', qte: 1, pu: 0 }
+      { designation: 'MOTEUR ESSENCE VOLKSWAGEN POLO 1.4', qte: 1, pu: 450000, garantie: '10 j' }
     ],
     company: {
-      name: 'اسم شركتك هنا',
-      title: 'المنصب',
-      phone: '+213 000 000 000',
-      rc: '00/00-0000000A 00',
-      activity: 'نشاط الشركة التجاري',
-      address: 'عنوان الشركة بالتفصيل - المدينة'
+      name: 'NOUADRA MOHAMED',
+      title: 'Pièces Auto & Réparations',
+      phone: '+213 776 263 109',
+      rc: '',
+      activity: '',
+      address: 'Lotissement Hay Mdani, Local N°01, Lot N°42 - Chlef'
     },
     warranty: {
-      title: 'شروط الضمان والإرجاع',
-      terms: [
-        'زيت المحرك المستهلك في ورشة GMe ضمان 100 يوم',
-        'زيت المحرك المستهلك في ورشة أخرى: 10 أيام'
+      title: 'CONDITIONS DE GARANTIE',
+      titleAr: 'شروط الضمان',
+      termsFr: [
+        "Consommation d'huile - max. 100 jours :",
+        "Atelier GME : 5 000 km | Hors atelier GME : 3 000 km"
+      ],
+      termsAr: [
+        "استهلاك المحرك للزيت لمدة أقصاها 100 يوم",
+        "5000 KM : داخل ورشة GME",
+        "3000 KM : خارج ورشة GME"
       ],
       returnConditions: {
-        title: 'يعتبر إرجاع المحرك في حالة:',
-        items: [
-          'ارتفاع غير طبيعي في درجة الحرارة خلال 48 ساعة من التركيب.',
-          'يجب على العميل التحقق من الزيت قبل مغادرة الورشة.'
-        ]
-      },
-      nonAcceptance: {
-        title: 'لا يقبل الإرجاع أو الاستبدال في الحالات التالية:',
-        items: [
-          'فتح المحرك أو تفكيكه من قبل العميل.',
-          'كسر أو ضغط داخلي.',
-          'صدمة حادة (مثل خروج المكبس) أو سوء الاستخدام.'
+        titleFr: 'Cas de non-retour / non-échange du moteur :',
+        titleAr: 'الحالات التي لا يمكن فيها استرجاع أو استبدال المحرك في المحل :',
+        itemsFr: [
+          "Le client doit vérifier l'état du moteur avant de quitter le magasin.",
+          "Ouverture ou démontage du moteur par le client",
+          "Casse de toute pièce interne",
+          "Pression excessive (ex : sortie de piston) ou mauvaise utilisation"
+        ],
+        itemsAr: [
+          "يجب على الزبون فحص المحرك من أي كسر قبل خروج المحرك من المحل",
+          "فتح المحرك أو تفكيكه",
+          "كسر أي جزء من المحرك",
+          "الإفراط في الضغط على المحرك",
+          "مثل خروج البيسطو - ناتج عن الإهمال أو إساءة الاستخدام"
         ]
       }
     }
@@ -102,9 +110,9 @@ const App = () => {
     setInvoiceData({
       ...invoiceData,
       id: Date.now(),
-      number: (savedInvoices.length + 1).toString().padStart(4, '0'),
+      number: (savedInvoices.length + 1).toString().padStart(3, '0'),
       date: new Date().toLocaleDateString('fr-FR'),
-      items: [{ designation: '', qte: 1, pu: 0 }]
+      items: [{ designation: '', qte: 1, pu: 0, garantie: '' }]
     });
     setView('editor');
   };
@@ -123,7 +131,7 @@ const App = () => {
   const addItem = () => {
     setInvoiceData({
       ...invoiceData,
-      items: [...invoiceData.items, { designation: '', qte: 1, pu: 0 }]
+      items: [...invoiceData.items, { designation: '', qte: 1, pu: 0, garantie: '' }]
     });
   };
 
@@ -671,7 +679,7 @@ const App = () => {
                             </button>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3 mb-3">
+                          <div className="grid grid-cols-3 gap-3 mb-3">
                             <div>
                               <label className="block text-[10px] text-slate-500 mb-1 font-bold">الكمية (Qté)</label>
                               <input 
@@ -688,6 +696,16 @@ const App = () => {
                                 value={item.pu} 
                                 onChange={(e) => updateItem(index, 'pu', parseFloat(e.target.value) || 0)}
                                 className="w-full border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-[#bc2c24]/20 outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] text-slate-500 mb-1 font-bold">الضمان (Garantie)</label>
+                              <input 
+                                type="text" 
+                                value={item.garantie} 
+                                onChange={(e) => updateItem(index, 'garantie', e.target.value)}
+                                className="w-full border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-[#bc2c24]/20 outline-none"
+                                placeholder="10 j"
                               />
                             </div>
                           </div>
@@ -709,142 +727,122 @@ const App = () => {
                 </div>
 
                 {/* Preview Side (The actual template) */}
-                <div className="invoice-container lg:w-[210mm] lg:h-[297mm] bg-white shadow-2xl overflow-hidden flex flex-col shrink-0 relative" ref={componentRef} style={{ direction: 'rtl', fontFamily: "'Cairo', sans-serif" }}>
+                <div className="invoice-container lg:w-[210mm] lg:h-[297mm] bg-white shadow-2xl overflow-hidden flex flex-col shrink-0 relative" ref={componentRef} style={{ direction: 'ltr', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
                   
-                  {/* Header: Red background */}
-                  <div className="bg-[#bc2c24] text-white p-8 flex flex-row-reverse justify-between items-center" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                    <div className="bg-white p-3 rounded-sm shadow-sm shrink-0">
-                      <Truck size={50} className="text-[#bc2c24]" />
+                  {/* Header */}
+                  <div className="bg-[#bc2c24] text-white p-6 flex justify-between items-start" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                    <div className="text-left">
+                      <h1 className="text-[28px] font-bold tracking-tight">{invoiceData.company.name}</h1>
+                      <p className="text-[14px] font-medium opacity-90">{invoiceData.company.title}</p>
+                      <p className="text-[12px] mt-2 opacity-80">Tel: {invoiceData.company.phone} | {invoiceData.company.address}</p>
                     </div>
-                    <div className="text-right flex-1 pr-8">
-                      <h1 className="text-[32px] font-black tracking-normal leading-tight">{invoiceData.company.name}</h1>
-                      <p className="text-[14px] mt-1 opacity-95 font-bold">{invoiceData.company.title} | {invoiceData.company.phone}</p>
-                    </div>
-                  </div>
-
-                  {/* Company Meta: Light Gray bar */}
-                  <div className="bg-[#f0f0f0] p-2 px-8 text-[11px] text-gray-700 flex flex-col items-start gap-1 border-b border-gray-200" style={{ WebkitPrintColorAdjust: 'exact', direction: 'rtl', textAlign: 'right' }}>
-                    <div className="flex gap-2 w-full justify-start">
-                      <span className="font-bold shrink-0">رقم السجل التجاري :</span>
-                      <span>{invoiceData.company.rc}</span>
-                    </div>
-                    <div className="flex gap-2 w-full justify-start">
-                      <span className="font-bold shrink-0">النشاط :</span>
-                      <span>{invoiceData.company.activity}</span>
-                    </div>
-                    <div className="flex gap-2 w-full justify-start">
-                      <span className="font-bold shrink-0">العنوان :</span>
-                      <span>{invoiceData.company.address}</span>
+                    <div className="text-right">
+                      <h2 className="text-[32px] font-black italic">AUTO</h2>
+                      <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-90">PIÈCES & SERVICE</p>
                     </div>
                   </div>
 
-                  {/* Client & Invoice Box */}
-                  <div className="p-8 pt-10 flex flex-row-reverse justify-between items-start gap-10">
-                    <div className="flex-1 border-r-[5px] border-[#bc2c24] bg-white p-4 shadow-sm min-h-[90px] flex flex-col justify-center text-right">
-                      <p className="text-[10px] text-gray-400 font-bold mb-1">العميل :</p>
-                      <h2 className="text-[20px] font-black text-gray-800 leading-tight">{invoiceData.client.name}</h2>
-                      <p className="text-[13px] text-gray-600 mt-1 font-bold">هاتف: {invoiceData.client.phone}</p>
+                  <div className="p-8 flex-grow">
+                    {/* Client & Invoice info boxes */}
+                    <div className="grid grid-cols-2 gap-6 mb-8">
+                      <div className="border border-gray-200 p-4 rounded-sm bg-gray-50/30">
+                        <p className="text-[10px] text-[#bc2c24] font-bold uppercase tracking-wider mb-2">CLIENT</p>
+                        <h3 className="text-[16px] font-bold text-gray-900">{invoiceData.client.name}</h3>
+                        <p className="text-[12px] text-gray-600 mt-2">Tel: {invoiceData.client.phone}</p>
+                      </div>
+                      <div className="border border-gray-200 p-4 rounded-sm bg-gray-50/30">
+                        <p className="text-[10px] text-[#bc2c24] font-bold uppercase tracking-wider mb-1">FACTURE / BON DE RÉPARATION</p>
+                        <h3 className="text-[18px] font-bold text-gray-900">N° {invoiceData.number}</h3>
+                        <p className="text-[12px] text-gray-600 mt-1">Date: {invoiceData.date}</p>
+                      </div>
                     </div>
 
-                    <div className="flex-1 bg-[#bc2c24] text-white p-6 rounded-[12px] text-center shadow-md" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                      <h3 className="text-[18px] font-black tracking-wide">فاتورة رقم {invoiceData.number}</h3>
-                      <p className="text-[13px] opacity-90 mt-1 font-bold">التاريخ : {invoiceData.date}</p>
-                    </div>
-                  </div>
-
-                  {/* Detail label */}
-                  <div className="px-8 mb-2 text-right">
-                    <p className="text-[10px] text-gray-400 font-bold tracking-wider">تفاصيل الفاتورة</p>
-                  </div>
-
-                  {/* Table */}
-                  <div className="px-8 flex-grow overflow-hidden">
-                    <table className="w-full border-collapse" dir="rtl">
+                    {/* Table */}
+                    <table className="w-full border-collapse mb-6">
                       <thead>
-                        <tr className="bg-[#bc2c24] text-white text-[11px] font-bold" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                          <th className="py-2 px-4 text-right border border-gray-300">البيان</th>
-                          <th className="py-2 px-4 text-center border border-gray-300 w-20">الكمية</th>
-                          <th className="py-2 px-4 text-left border border-gray-300 w-36">سعر الوحدة (د.ج)</th>
-                          <th className="py-2 px-4 text-left border border-gray-300 w-36">المجموع (د.ج)</th>
+                        <tr className="bg-[#bc2c24] text-white text-[12px] font-bold" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                          <th className="py-2 px-4 text-left border border-gray-300">Désignation</th>
+                          <th className="py-2 px-4 text-center border border-gray-300 w-16">Qté</th>
+                          <th className="py-2 px-4 text-center border border-gray-300 w-40">Prix Unitaire</th>
+                          <th className="py-2 px-4 text-center border border-gray-300 w-40">Total</th>
+                          <th className="py-2 px-4 text-center border border-gray-300 w-24">Garantie</th>
                         </tr>
                       </thead>
-                      <tbody className="text-[13px]">
+                      <tbody className="text-[12px]">
                         {invoiceData.items.map((item, index) => (
-                          <tr key={index} className="text-gray-800 font-bold border-b border-gray-200">
-                            <td className="py-3 px-4 border border-gray-300 text-right">{item.designation}</td>
-                            <td className="py-3 px-4 border border-gray-300 text-center font-black">{item.qte}</td>
-                            <td className="py-3 px-4 border border-gray-300 text-left" dir="ltr">{item.pu.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}</td>
-                            <td className="py-3 px-4 border border-gray-300 text-left font-black" dir="ltr">{(item.qte * item.pu).toLocaleString('fr-FR', { minimumFractionDigits: 2 })}</td>
+                          <tr key={index} className="text-gray-800 border-b border-gray-200">
+                            <td className="py-3 px-4 border border-gray-200 font-medium">{item.designation}</td>
+                            <td className="py-3 px-4 border border-gray-200 text-center font-bold">{item.qte}</td>
+                            <td className="py-3 px-4 border border-gray-200 text-center">{item.pu.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DZD</td>
+                            <td className="py-3 px-4 border border-gray-200 text-center font-bold">{(item.qte * item.pu).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DZD</td>
+                            <td className="py-3 px-4 border border-gray-200 text-center font-bold text-[#bc2c24]">{item.garantie}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
 
                     {/* Total Section */}
-                    <div className="mt-4 flex justify-start">
-                      <div className="flex items-stretch bg-[#bc2c24] text-white rounded-md overflow-hidden h-11 border border-[#bc2c24]" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                        <div className="px-5 flex items-center justify-center border-l border-white/20 min-w-[140px]">
-                          <span className="font-black text-[13px]">الإجمالي العام :</span>
-                        </div>
-                        <div className="px-8 bg-white flex items-center justify-start min-w-[200px]">
-                          <span className="text-[#bc2c24] font-black text-[18px]" dir="ltr">
-                            {calculateTotal().toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DZD
-                          </span>
-                        </div>
+                    <div className="flex justify-end mb-10">
+                      <div className="bg-black text-white px-6 py-2 flex items-center gap-4 shadow-sm" style={{ WebkitPrintColorAdjust: 'exact' }}>
+                        <span className="font-bold text-[14px] uppercase tracking-wider">TOTAL GÉNÉRAL</span>
+                        <span className="font-black text-[18px]">
+                          {calculateTotal().toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DZD
+                        </span>
                       </div>
                     </div>
 
-                    {/* Warranty Section */}
-                    <div className="mt-6 bg-[#f8f8f8] p-5 border-r-4 border-[#bc2c24] rounded-sm text-right shadow-sm" style={{ WebkitPrintColorAdjust: 'exact', direction: 'rtl' }}>
-                      <h4 className="text-[13px] font-black text-[#bc2c24] mb-3">{invoiceData.warranty.title}</h4>
-                      <ul className="text-[11px] text-gray-700 space-y-1.5 mb-4 pr-0">
-                        {invoiceData.warranty.terms.map((term, i) => (
-                          <li key={i} className="flex items-start gap-2 justify-start flex-row">
-                            <span className="mt-2 w-1.5 h-1.5 bg-[#bc2c24] rounded-full shrink-0"></span>
-                            <span className="text-right">{term}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    {/* Warranty Conditions - Two Columns */}
+                    <div className="border-l-4 border-[#bc2c24] pl-6 py-2">
+                      <h4 className="text-[12px] font-bold text-[#bc2c24] mb-6 uppercase tracking-widest">{invoiceData.warranty.title}</h4>
+                      
+                      <div className="grid grid-cols-2 gap-12">
+                        {/* French Column */}
+                        <div className="text-left">
+                          <div className="mb-4">
+                            <p className="text-[11px] font-bold text-gray-800 mb-2">{invoiceData.warranty.termsFr[0]}</p>
+                            <ul className="text-[10px] text-gray-600 space-y-1 ml-2">
+                              <li>• {invoiceData.warranty.termsFr[1]}</li>
+                            </ul>
+                          </div>
+                          
+                          <div className="mt-6">
+                            <p className="text-[11px] font-bold text-[#bc2c24] mb-2">{invoiceData.warranty.returnConditions.titleFr}</p>
+                            <ul className="text-[10px] text-gray-600 space-y-1 ml-2">
+                              {invoiceData.warranty.returnConditions.itemsFr.map((item, i) => (
+                                <li key={i}>• {item}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
 
-                      <h4 className="text-[12px] font-black text-gray-800 mb-2">{invoiceData.warranty.returnConditions.title}</h4>
-                      <ul className="text-[11px] text-gray-700 space-y-1.5 mb-4 pr-0">
-                        {invoiceData.warranty.returnConditions.items.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2 justify-start flex-row">
-                            <span className="mt-2 w-1.5 h-1.5 bg-[#bc2c24] rounded-full shrink-0"></span>
-                            <span className="text-right">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <h4 className="text-[12px] font-black text-gray-800 mb-2">{invoiceData.warranty.nonAcceptance.title}</h4>
-                      <ul className="text-[11px] text-gray-700 space-y-1.5 pr-0">
-                        {invoiceData.warranty.nonAcceptance.items.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2 justify-start flex-row">
-                            <span className="mt-2 w-1.5 h-1.5 bg-[#bc2c24] rounded-full shrink-0"></span>
-                            <span className="text-right">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Signature and Stamp */}
-                    <div className="mt-10 grid grid-cols-2 gap-16 items-start">
-                      <div className="border border-gray-100 rounded-sm p-3 h-28 flex flex-col justify-end">
-                        <p className="text-[10px] text-gray-400 text-center italic font-bold">توقيع العميل</p>
-                      </div>
-                      <div className="flex justify-center">
-                        <div className="w-48 h-24 bg-gray-50 border border-dashed border-gray-300 rounded-sm flex items-center justify-center">
-                          <span className="text-[11px] text-gray-300 font-bold">الختم والتوقيع</span>
+                        {/* Arabic Column */}
+                        <div className="text-right" dir="rtl" style={{ fontFamily: "'Cairo', sans-serif" }}>
+                          <div className="mb-4">
+                            <p className="text-[11px] font-bold text-gray-800 mb-2">{invoiceData.warranty.termsAr[0]}</p>
+                            <ul className="text-[10px] text-gray-600 space-y-1 mr-2">
+                              <li>• {invoiceData.warranty.termsAr[1]}</li>
+                              <li>• {invoiceData.warranty.termsAr[2]}</li>
+                            </ul>
+                          </div>
+                          
+                          <div className="mt-6">
+                            <p className="text-[11px] font-bold text-[#bc2c24] mb-2">{invoiceData.warranty.returnConditions.titleAr}</p>
+                            <ul className="text-[10px] text-gray-600 space-y-1 mr-2">
+                              {invoiceData.warranty.returnConditions.itemsAr.map((item, i) => (
+                                <li key={i}>• {item}</li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Footer Bar stays at the bottom */}
-                  <div className="mt-auto">
-                    <div className="bg-[#bc2c24] text-white py-4 px-8 text-[10px] text-center font-bold tracking-normal leading-relaxed" style={{ WebkitPrintColorAdjust: 'exact' }}>
-                      {invoiceData.company.name} — {invoiceData.company.address} — هاتف: {invoiceData.company.phone} | سجل تجاري: {invoiceData.company.rc}
-                    </div>
+                  {/* Footer */}
+                  <div className="mt-auto border-t border-gray-100 py-6 px-8 text-center">
+                    <p className="text-[9px] text-gray-400 font-medium uppercase tracking-widest">
+                      {invoiceData.company.name} — {invoiceData.company.title} | {invoiceData.company.address} | Tel: {invoiceData.company.phone} <span className="text-[#bc2c24] ml-2 font-bold">ORIGINAL</span>
+                    </p>
                   </div>
 
                 </div>
