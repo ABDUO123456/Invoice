@@ -4,7 +4,7 @@ import html2canvas from 'html2canvas';
 import { 
   Printer, Plus, Trash2, Truck, Save, List, FileText, 
   ChevronRight, ArrowRight, CheckCircle2, Globe, ShieldCheck, 
-  Zap, Menu, X, Phone, Mail, MapPin, Download
+  Zap, Menu, X, Phone, Mail, MapPin, Download, Square
 } from 'lucide-react';
 
 const App = () => {
@@ -820,8 +820,8 @@ const App = () => {
                           <div className="mb-4">
                             <p className="text-[11px] font-bold text-gray-800 mb-2">{invoiceData.warranty.termsAr[0]}</p>
                             <ul className="text-[10px] text-gray-600 space-y-1 mr-2">
-                              <li>• {invoiceData.warranty.termsAr[1]}</li>
-                              <li>• {invoiceData.warranty.termsAr[2]}</li>
+                              <li className="flex items-center gap-2"><Square size={10} className="text-gray-400" /> {invoiceData.warranty.termsAr[1]}</li>
+                              <li className="flex items-center gap-2"><Square size={10} className="text-gray-400" /> {invoiceData.warranty.termsAr[2]}</li>
                             </ul>
                           </div>
                           
