@@ -42,6 +42,7 @@ const App = () => {
         "5000 KM : داخل ورشة GME",
         "3000 KM : خارج ورشة GME"
       ],
+      selectedWarranty: '3000',
       returnConditions: {
         titleFr: 'Cas de non-retour / non-échange du moteur :',
         titleAr: 'الحالات التي لا يمكن فيها استرجاع أو استبدال المحرك في المحل :',
@@ -112,7 +113,11 @@ const App = () => {
       id: Date.now(),
       number: (savedInvoices.length + 1).toString().padStart(3, '0'),
       date: new Date().toLocaleDateString('fr-FR'),
-      items: [{ designation: '', qte: 1, pu: 0, garantie: '' }]
+      items: [{ designation: '', qte: 1, pu: 0, garantie: '' }],
+      warranty: {
+        ...invoiceData.warranty,
+        selectedWarranty: '3000'
+      }
     });
     setView('editor');
   };
@@ -724,6 +729,38 @@ const App = () => {
                       ))}
                     </div>
                   </div>
+
+                  <div className="mb-6">
+                    <h3 className="text-sm font-bold text-slate-400 uppercase mb-3 border-b pb-2">خيارات الضمان (المسافة)</h3>
+                    <div className="flex gap-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="warranty_km" 
+                          checked={invoiceData.warranty.selectedWarranty === '5000'}
+                          onChange={() => setInvoiceData({
+                            ...invoiceData, 
+                            warranty: { ...invoiceData.warranty, selectedWarranty: '5000' }
+                          })}
+                          className="w-4 h-4 text-[#bc2c24] focus:ring-[#bc2c24]"
+                        />
+                        <span className="text-sm font-bold text-slate-700">5000 KM (داخل الورشة)</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="warranty_km" 
+                          checked={invoiceData.warranty.selectedWarranty === '3000'}
+                          onChange={() => setInvoiceData({
+                            ...invoiceData, 
+                            warranty: { ...invoiceData.warranty, selectedWarranty: '3000' }
+                          })}
+                          className="w-4 h-4 text-[#bc2c24] focus:ring-[#bc2c24]"
+                        />
+                        <span className="text-sm font-bold text-slate-700">3000 KM (خارج الورشة)</span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Preview Side (The actual template) */}
@@ -820,8 +857,14 @@ const App = () => {
                           <div className="mb-4">
                             <p className="text-[11px] font-bold text-gray-800 mb-2">{invoiceData.warranty.termsAr[0]}</p>
                             <ul className="text-[10px] text-gray-600 space-y-1 mr-2">
-                              <li className="flex items-center gap-2"><Square size={10} className="text-gray-400" /> {invoiceData.warranty.termsAr[1]}</li>
-                              <li className="flex items-center gap-2"><SquareCheck size={10} className="text-[#bc2c24]" /> {invoiceData.warranty.termsAr[2]}</li>
+                              <li className="flex items-center gap-2">
+                                {invoiceData.warranty.selectedWarranty === '5000' ? <SquareCheck size={10} className="text-[#bc2c24]" /> : <Square size={10} className="text-gray-400" />}
+                                {invoiceData.warranty.termsAr[1]}
+                              </li>
+                              <li className="flex items-center gap-2">
+                                {invoiceData.warranty.selectedWarranty === '3000' ? <SquareCheck size={10} className="text-[#bc2c24]" /> : <Square size={10} className="text-gray-400" />}
+                                {invoiceData.warranty.termsAr[2]}
+                              </li>
                             </ul>
                           </div>
                           
