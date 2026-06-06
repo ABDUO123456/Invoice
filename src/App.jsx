@@ -375,14 +375,14 @@ const App = () => {
                     <div className="bg-slate-800 p-3 rounded-lg"><Phone size={24} className="text-[#bc2c24]" /></div>
                     <div>
                       <p className="text-sm text-slate-500">اتصل بنا</p>
-                      <p className="text-lg font-bold">+213 776 263 109</p>
+                      <p className="text-lg font-bold">69 27 06 54 213+</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="bg-slate-800 p-3 rounded-lg"><Mail size={24} className="text-[#bc2c24]" /></div>
                     <div>
                       <p className="text-sm text-slate-500">البريد الإلكتروني</p>
-                      <p className="text-lg font-bold">contact@facturati.dz</p>
+                      <p className="text-lg font-bold">abdoudhn4@gmail.com</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
